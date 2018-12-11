@@ -15,6 +15,7 @@ dirname = os.path.dirname(os.path.realpath(__file__))
 #place the .csv files one level up and within data/kaggle-facial-keypoint-detection folder.
 FTRAIN = os.path.join(dirname, '../data/training.csv')
 FTEST = os.path.join(dirname, '../data/test.csv')
+MODEL_PATH = os.path.join(dirname,'../results/models/single_hidden_layer.model')
 
 def load(test=False, cols=None):
     """Loads data from FTEST if *test* is True, otherwise from FTRAIN.
@@ -57,7 +58,7 @@ def load_trained_model(weights_path):
    model.load_weights(weights_path)
 
 
-model = load_model('1_single_hidden_layer.h5')
+model = load_model(MODEL_PATH)
 X, _ = load(test=True)
 y_pred = model.predict(X)
 
