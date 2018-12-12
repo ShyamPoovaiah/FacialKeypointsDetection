@@ -56,6 +56,10 @@ from keras.layers import Dense
 from keras import optimizers
 from keras.callbacks import CSVLogger
 from keras.utils import plot_model
+import keras.backend as K
+
+def get_categorical_accuracy_keras(y_true, y_pred):
+    return K.mean(K.equal(K.argmax(y_true, axis=1), K.argmax(y_pred, axis=1)))
 
 # Version - Single Hidden Layer
 model = Sequential()
@@ -65,23 +69,19 @@ model.add(Dense(30)) # 30 to represent 30 facial keypoints.
 
 sgd = optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True, clipnorm=1)
 #   Compile the model.  Minimize mean squared error  Maximize for accuracy
-model.compile(loss='mean_squared_error', optimizer=sgd, metrics=['mse'])
+model.compile(loss='mean_squared_error', optimizer=sgd, metrics=[get_categorical_accuracy_keras])
 
 #   Add a logger to log the losses
 csv_logger = CSVLogger(LOG_PATH, append=True, separator=';')
 #   Fit the model with the data from make_blobs.  Make 100 cycles through the data.
 #   Set verbose to 0 to supress progress messages 
-history = model.fit(X, y, epochs=400, verbose=1, validation_split=.2, callbacks=[csv_logger])
+history = model.fit(X, y, epochs=10, verbose=1, validation_split=.2, shuffle=True, callbacks=[csv_logger])
 #   Get loss and accuracy on test data
 eval_result = model.evaluate(X, y)
 #   Print test accuracy
 print("\n\nTest loss:", eval_result)
 # Save fine tuned model
 model.save(MODEL_PATH)
-
-#   Plot data to see relationships in training and validation data
-#   epoch_list = list(range(1, len(hist.history['loss']) + 1))  # values for x axis [1, 2, ..., # of epochs]
-#   plt.plot(epoch_list, hist.history['loss'], epoch_list, hist.history['val_loss'])
 
 # Plot training & validation loss values
 plt.plot(history.history['loss'])
@@ -92,6 +92,15 @@ plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='upper left')
 plt.show()
 breakpoint()
+
+# Plot training & validation accuracy values
+plt.plot(history.history['get_categorical_accuracy_keras'])
+#plt.plot(history.history['val_acc'])
+plt.title('Model accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+#plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
 
 #   To visualize the model
 plot_model(model, to_file=MODEL_IMAGE, show_shapes=True)
