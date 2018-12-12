@@ -75,7 +75,7 @@ model.compile(loss='mean_squared_error', optimizer=sgd, metrics=[get_categorical
 csv_logger = CSVLogger(LOG_PATH, append=True, separator=';')
 #   Fit the model with the data from make_blobs.  Make 100 cycles through the data.
 #   Set verbose to 0 to supress progress messages 
-history = model.fit(X, y, epochs=10, verbose=1, validation_split=.2, shuffle=True, callbacks=[csv_logger])
+history = model.fit(X, y, epochs=400, verbose=1, validation_split=.2, shuffle=True, callbacks=[csv_logger])
 #   Get loss and accuracy on test data
 eval_result = model.evaluate(X, y)
 #   Print test accuracy

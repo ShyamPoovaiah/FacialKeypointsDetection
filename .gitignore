@@ -42,3 +42,4 @@ data/IdLookupTable.csv
 data/SampleSubmission.csv
 data/test.csv
 data/training.csv
+.DS_Store
