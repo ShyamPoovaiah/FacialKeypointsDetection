@@ -10,6 +10,7 @@ FTRAIN = os.path.join(dirname, '../data/training.csv')
 FTEST = os.path.join(dirname, '../data/test.csv')
 MODEL_PATH = os.path.join(dirname,'../results/models/single_hidden_layer.model')
 LOG_PATH = os.path.join(dirname,'../results/logs/single_hidden_layer.csv')
+MODEL_IMAGE = os.path.join(dirname,'../results/models/single_hidden_layer.png')
 
 def load(test=False, cols=None):
     """Loads data from FTEST if *test* is True, otherwise from FTRAIN.
@@ -54,6 +55,7 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras import optimizers
 from keras.callbacks import CSVLogger
+from keras.utils import plot_model
 
 # Version - Single Hidden Layer
 model = Sequential()
@@ -69,18 +71,28 @@ model.compile(loss='mean_squared_error', optimizer=sgd, metrics=['mse'])
 csv_logger = CSVLogger(LOG_PATH, append=True, separator=';')
 #   Fit the model with the data from make_blobs.  Make 100 cycles through the data.
 #   Set verbose to 0 to supress progress messages 
-hist = model.fit(X, y, epochs=400, verbose=1, validation_split=.2, callbacks=[csv_logger])
+history = model.fit(X, y, epochs=400, verbose=1, validation_split=.2, callbacks=[csv_logger])
 #   Get loss and accuracy on test data
 eval_result = model.evaluate(X, y)
 #   Print test accuracy
 print("\n\nTest loss:", eval_result)
 # Save fine tuned model
 model.save(MODEL_PATH)
-# list all data in history
-print(hist.history.keys())
+
 #   Plot data to see relationships in training and validation data
-epoch_list = list(range(1, len(hist.history['loss']) + 1))  # values for x axis [1, 2, ..., # of epochs]
-plt.plot(epoch_list, hist.history['loss'], epoch_list, hist.history['val_loss'])
-plt.legend(('Training Loss', 'Validation Loss'))
+#   epoch_list = list(range(1, len(hist.history['loss']) + 1))  # values for x axis [1, 2, ..., # of epochs]
+#   plt.plot(epoch_list, hist.history['loss'], epoch_list, hist.history['val_loss'])
+
+# Plot training & validation loss values
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
 plt.show()
+breakpoint()
+
+#   To visualize the model
+plot_model(model, to_file=MODEL_IMAGE, show_shapes=True)
 breakpoint()
