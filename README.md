@@ -1,7 +1,7 @@
 [//]: # (Image References)
 [single layer loss image]: ./results/losses/single_hidden_layer.png "Single Layer Loss"
 [single layer model image]: ./results/models/single_hidden_layer.png "Single Layer Model"
-[single layer accuray image]: ./results/accuracy/single_hidden_layer.png "Single Layer Model"
+[single layer accuracy image]: ./results/accuracy/single_hidden_layer.png "Single Layer Model"
 # Facial Keypoints Detection
 
 ## Motive
@@ -9,20 +9,28 @@ Faces have always intringued me. From reading Paul Ekman's 'Unmasking the face' 
 'Indian Institute of Science' we decided to go work on faces.
 
 ## Contents
-Prerequisites
-Data : Loading and Normalization.
-First model : A Dense network with single hidden layer.
-Testing a generated Model.
-Second model : Using CNN's
-Data Augmentation to improve training accuracy.
-Changing learning rate and momentum over time
-Using Dropout while training.
-Third Model : Ensemble Learning with specialists for each feature.
-Supervised pre-training
-Conclusion
+Prerequisites   
+Data : Loading and Normalization.   
+First model : A Dense network with single hidden layer.   
+Testing a generated Model.   
+Second model : Using CNN's   
+Data Augmentation to improve training accuracy.   
+Changing learning rate and momentum over time   
+Using Dropout while training.   
+Third Model : Ensemble Learning with specialists for each feature.   
+Supervised pre-training   
+Conclusion   
 
 ## Prerequisites
-1. Download the files from https://www.kaggle.com/c/facial-keypoints-detection/data. Copy the files to the 'data folder' before running any of the training code.
+1. Download the files from https://www.kaggle.com/c/facial-keypoints-detection/data. Copy the files to the 'data folder' before running any of the training code.   
+2. Install 'pydot' to visualize models from keras.
+```
+pip3 install pydot
+```
+3. 'pydot' requires a system level installation of 'GraphViz'.
+```
+brew install Graphviz
+```
 
 ## Data
 
@@ -34,10 +42,10 @@ For some of the keypoints we only have about 2,000 labels, while other keypoints
 
 
 ## First Model : A Single Hidden Layer
-A model with the below configuration was used:
+A model with the below configuration was used:   
 ![Single Layer Model][single layer model image]
 
-While training the output looks like this:
+While training the output looks like this:   
 Epoch 395/400
 1712/1712 [==============================] - 1s 416us/step - loss: 7.1303e-04 - get_categorical_accuracy_keras: 0.8037 - val_loss: 0.0030 - val_get_categorical_accuracy_keras: 0.7079
 Epoch 396/400
@@ -63,11 +71,11 @@ Epoch 400/400
 The logs of the training are [here](./results/losses/single_hidden_layer.csv)
 
 ### Results
-![Single Layer Loss][single layer loss image]
+![Single Layer Loss][single layer loss image]   
 There is a small amount of overfitting, but it is not that bad. In particular, we don't see a point where the validation error gets worse again, thus 'Early stopping', would not be useful. Regularization was not used to control overfitting either.
 
 Accuracy of the model:
-![Single Layer Model][single layer accuracy image]
+![Single Layer Model][single layer accuracy image]   
 
  Based on MSE loss of x, we'll take the square root and multiply by 48 again (since we had normalized locations from [-1, 1])
 ```python
