@@ -2,6 +2,9 @@
 [single layer loss image]: ./results/losses/single_hidden_layer.png "Single Layer Loss"
 [single layer model image]: ./results/models/single_hidden_layer.png "Single Layer Model"
 [single layer accuracy image]: ./results/accuracy/single_hidden_layer.png "Single Layer Model"
+[convolution loss image]: ./results/losses/convolution.png "Convolution Loss"
+[convolution model image]: ./results/models/convolution.png "Convolution Model"
+[convolution accuracy image]: ./results/accuracy/convolution.png "Convolution Accuracy"
 # Facial Keypoints Detection
 
 ## Motive
@@ -83,3 +86,31 @@ Accuracy of the model:
 >>> np.sqrt(0.0011509046223989435)*48
 1.628399290716858
 ```
+
+## Second Model : A Convolutinal Neural Network
+A model with the below configuration was used:   
+![Convolution Model][convolution model image]
+
+### Notes during training
+1. The input dimensions would match after setting 'data_format' to 'channels_last'. Also a flattening layer layer was required before the dense layers to keep the dimensions matched.
+
+2. The training on a machine without a GPU took hours. The accuracy and gain did not improve by much after a few hundred epochs. Early stopping could be used.
+
+
+
+The logs of the training are [here](./results/losses/convolution_layer.csv)
+
+### Results
+![Convolution Loss][convolution loss image]   
+There is a small amount of overfitting, but it is not that bad. In particular, we don't see a point where the validation error gets worse again, thus 'Early stopping', would not be useful. Regularization was not used to control overfitting either.
+
+Accuracy of the model:
+![Convolution Accuracy][convolution accuracy image]   
+
+ Based on MSE loss of x, we'll take the square root and multiply by 48 again (since we had normalized locations from [-1, 1])
+```python
+>>> import numpy as np
+>>> np.sqrt(0.0011509046223989435)*48
+1.628399290716858
+```
+
