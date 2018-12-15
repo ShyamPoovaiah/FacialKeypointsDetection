@@ -3,7 +3,7 @@
 [single layer model image]: ./results/models/single_hidden_layer.png "Single Layer Model"
 [single layer accuracy image]: ./results/accuracy/single_hidden_layer.png "Single Layer Model"
 [convolution loss image]: ./results/losses/convolution.png "Convolution Loss"
-[convolution model image]: ./results/models/convolution.png "Convolution Model"
+[convolution model image]: ./results/models/convolution_layer.png "Convolution Model"
 [convolution accuracy image]: ./results/accuracy/convolution.png "Convolution Accuracy"
 # Facial Keypoints Detection
 
