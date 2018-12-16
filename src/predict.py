@@ -7,15 +7,18 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.optimizers import Adam
 from keras.models import load_model
-
 import matplotlib.pyplot as pyplot
+import keras.backend as K
+
+def get_categorical_accuracy_keras(y_true, y_pred):
+    return K.mean(K.equal(K.argmax(y_true, axis=1), K.argmax(y_pred, axis=1)))
 
 
 dirname = os.path.dirname(os.path.realpath(__file__))
 #place the .csv files one level up and within data/kaggle-facial-keypoint-detection folder.
 FTRAIN = os.path.join(dirname, '../data/training.csv')
 FTEST = os.path.join(dirname, '../data/test.csv')
-MODEL_PATH = os.path.join(dirname,'../results/models/single_hidden_layer.model')
+MODEL_PATH = os.path.join(dirname,'../results/models/optimized_convoloution_layer.hdf5')
 
 def load(test=False, cols=None):
     """Loads data from FTEST if *test* is True, otherwise from FTRAIN.
@@ -53,11 +56,7 @@ def plot_sample(x, y, axis):
     axis.imshow(img, cmap='gray')
     axis.scatter(y[0::2] * 48 + 48, y[1::2] * 48 + 48, marker='x', s=10)
 
-def load_trained_model(weights_path):
-   model = create_model()
-   model.load_weights(weights_path)
-
-
+breakpoint()
 model = load_model(MODEL_PATH)
 X, _ = load(test=True)
 y_pred = model.predict(X)
