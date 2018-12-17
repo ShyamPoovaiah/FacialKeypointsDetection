@@ -17,7 +17,12 @@ dirname = os.path.dirname(os.path.realpath(__file__))
 #place the .csv files one level up and within data/kaggle-facial-keypoint-detection folder.
 FTRAIN = os.path.join(dirname, '../data/training.csv')
 FTEST = os.path.join(dirname, '../data/test.csv')
-MODEL_PATH = os.path.join(dirname,'../results/models/single_hidden_layer.model')
+MODEL_PATH = os.path.join(dirname,'../results/models/convoloution_layer.model')
+
+def plot_sample(x, y, axis):
+    img = x.reshape(96, 96)
+    axis.imshow(img, cmap='gray')
+    axis.scatter(y[0::2] * 48 + 48, y[1::2] * 48 + 48, marker='x', s=10)
 
 def load(test=False, cols=None):
     """Loads data from FTEST if *test* is True, otherwise from FTRAIN.
@@ -50,16 +55,14 @@ def load(test=False, cols=None):
 
     return X, y
 
-def plot_sample(x, y, axis):
-    img = x.reshape(96, 96)
-    axis.imshow(img, cmap='gray')
-    axis.scatter(y[0::2] * 48 + 48, y[1::2] * 48 + 48, marker='x', s=10)
+def load2d(test=False, cols=None):
+    X, y = load(test=test, cols=cols)
+    X = X.reshape(-1, 96, 96, 1)
+    return X, y
 
-
-breakpoint()
 model = load_model(MODEL_PATH, custom_objects={'get_categorical_accuracy_keras': get_categorical_accuracy_keras})
 
-X, _ = load(test=True)
+X, _ = load2d(test=True)
 y_pred = model.predict(X)
 
 fig = pyplot.figure(figsize=(6, 6))
