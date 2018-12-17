@@ -55,6 +55,26 @@ print("X.shape == {}; X.min == {:.3f}; X.max == {:.3f}".format(
 print("y.shape == {}; y.min == {:.3f}; y.max == {:.3f}".format(
     y.shape, y.min(), y.max()))
 
+#   Flipping the image.
+X, y = load2d()
+X_flipped = X[:, :, ::-1]  # simple slice to flip all images
+
+print(X[1])
+print(X_flipped[1])
+
+# plot two images:
+def plot_sample(x, y, axis):
+    img = x.reshape(96, 96)
+    axis.imshow(img, cmap='gray')
+    axis.scatter(y[0::2] * 48 + 48, y[1::2] * 48 + 48, marker='x', s=10)
+
+breakpoint()
+fig = plt.figure(figsize=(6, 3))
+ax = fig.add_subplot(1, 2, 1, xticks=[], yticks=[])
+plot_sample(X[10], y[10], ax)
+ax = fig.add_subplot(1, 2, 2, xticks=[], yticks=[])
+plot_sample(X_flipped[10], y[10], ax)
+plt.show()
 
 # Create the keras model
 from keras.models import Sequential
