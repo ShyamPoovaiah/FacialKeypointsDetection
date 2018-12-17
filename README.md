@@ -2,9 +2,11 @@
 [single layer loss image]: ./results/losses/single_hidden_layer.png "Single Layer Loss"
 [single layer model image]: ./results/models/single_hidden_layer.png "Single Layer Model"
 [single layer accuracy image]: ./results/accuracy/single_hidden_layer.png "Single Layer Model"
+[single layer prediction image]: ./results/predictions/single_hidden_layer.png "Single Layer Model"
 [convolution loss image]: ./results/losses/convolution.png "Convolution Loss"
 [convolution model image]: ./results/models/convolution_layer.png "Convolution Model"
 [convolution accuracy image]: ./results/accuracy/convolution.png "Convolution Accuracy"
+[flipped]: ./results/other/flip_without_adjust.png "Flipped"
 # Facial Keypoints Detection
 
 ## Motive
@@ -41,8 +43,11 @@ The training dataset consists of 7,049 96x96 gray-scale images. The model is sup
 For some of the keypoints we only have about 2,000 labels, while other keypoints have more than 7,000 labels available for training.
 
 ## Loading the data.
+The column containing the image pixels is reshaped into a 2D matrix. 1 refers to number of channels. Since this is a grey scale image its 1.
 
-
+```python
+  X = X.reshape(-1, 96, 96, 1)
+```
 
 ## First Model : A Single Hidden Layer
 A model with the below configuration was used:   
@@ -80,12 +85,22 @@ There is a small amount of overfitting, but it is not that bad. In particular, w
 Accuracy of the model:
 ![Single Layer Model][single layer accuracy image]   
 
- Based on MSE loss of x, we'll take the square root and multiply by 48 again (since we had normalized locations from [-1, 1])
+ Based on MSE loss(Test) of .0029712174083410857, we'll take the square root and multiply by 48 again (since we had normalized locations from [-1, 1])
 ```python
 >>> import numpy as np
->>> np.sqrt(0.0011509046223989435)*48
-1.628399290716858
+>>> np.sqrt(.0029712174083410857)*48
+2.61642597999979
 ```
+
+### Predicting with the model
+
+While loading the model a custom object with the custom accuracy function needs to be passed. Otherwise, a 'Undefined metric function' error is thrown.
+```python
+model = load_model(MODEL_PATH, custom_objects={'get_categorical_accuracy_keras': get_categorical_accuracy_keras})
+```
+
+The prediction yields decent results as seen below:   
+![Single Layer Model][single layer prediction image]  
 
 ## Second Model : A Convolutinal Neural Network
 A model with the below configuration was used:   
@@ -96,21 +111,24 @@ A model with the below configuration was used:
 
 2. The training on a machine without a GPU took hours. The accuracy and gain did not improve by much after a few hundred epochs. Early stopping could be used.
 
-
-
 The logs of the training are [here](./results/losses/convolution_layer.csv)
 
 ### Results
 ![Convolution Loss][convolution loss image]   
 There is a small amount of overfitting, but it is not that bad. In particular, we don't see a point where the validation error gets worse again, thus 'Early stopping', would not be useful. Regularization was not used to control overfitting either.
 
+```python
+>>> import numpy as np
+>>> np.sqrt(.0029712174083410857)*48
+2.61642597999979
+```
+
 Accuracy of the model:
 ![Convolution Accuracy][convolution accuracy image]   
 
- Based on MSE loss of x, we'll take the square root and multiply by 48 again (since we had normalized locations from [-1, 1])
-```python
->>> import numpy as np
->>> np.sqrt(0.0011509046223989435)*48
-1.628399290716858
-```
+## Augmenting the data.
+Since we ignored a lot of rows with NA values, the number of training samples is reduced. One way to get around this is to augment available data.
+Here the images are flipped to increase the number of images.   
+![Flipped][flipped]   
+We can see that the target values also needs to be updated along with flipping the image.
 
