@@ -31,11 +31,12 @@ Conclusion
 
 ## Prerequisites
 1. Download the files from https://www.kaggle.com/c/facial-keypoints-detection/data. Copy the files to the 'data folder' before running any of the training code.   
-2. Install 'pydot' to visualize models from keras.
+2. Install python, numpy, matplotlib, pandas, keras and tensorflow.
+3. Install 'pydot' to visualize models from keras.
 ```
 pip3 install pydot
 ```
-3. 'pydot' requires a system level installation of 'GraphViz'.
+4. 'pydot' requires a system level installation of 'GraphViz'.
 ```
 brew install Graphviz
 ```
@@ -140,4 +141,13 @@ The loss of the model above is not low compared to the Dense Model. This can be 
 Here the images are flipped to increase the number of training data.      
 ![Flipped][flipped]   
 We can see that the target values also needs to be updated along with flipping the image.
+
+## Training Specialists (TODO)
+Instead of training a single model, let's train a few specialists, with each one predicting a different set of target values. We'll train one model that only predicts left_eye_center and right_eye_center, one only for nose_tip and so on; overall, we'll have six models. This will allow us to use the full training dataset.
+
+The six specialists are all going to use exactly the same network architecture. We will use 'Early stopping' since this training is going to take a while. Early stopping will be based on improvement(No improvement rather) in error. Additionally we will  increase the momentum.   
+Both these involve callbacks during training.
+```python
+history = model.fit(X, y, epochs=epochs, verbose=1, batch_size=batch_size, validation_split=.2, shuffle=True, callbacks=[csv_logger, checkpointer, update_momentum, early_stopping])
+```
 
