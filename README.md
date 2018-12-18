@@ -6,6 +6,9 @@
 [convolution loss image]: ./results/losses/convolution.png "Convolution Loss"
 [convolution model image]: ./results/models/convolution_layer.png "Convolution Model"
 [convolution accuracy image]: ./results/accuracy/convolution.png "Convolution Accuracy"
+[optimized convolution loss image]: ./results/losses/convolution_optimized.png "Optimized Convolution Loss"
+[optimized convolution model image]: ./results/models/optimized_convolution_layer.png "Optimized Convolution Model"
+[optimized convolution accuracy image]: ./results/accuracy/optimized_convolution.png "Optimized Convolution Accuracy"
 [flipped]: ./results/other/flip_without_adjust.png "Flipped"
 # Facial Keypoints Detection
 
@@ -126,9 +129,15 @@ There is a small amount of overfitting, but it is not that bad. In particular, w
 Accuracy of the model:
 ![Convolution Accuracy][convolution accuracy image]   
 
+### Training with Dropout
+![Optimized Convolution Model][optimized convolution model image]
+![Optimized Convolution Loss][optimized convolution loss image]  
+![Optimized Convolution Accuracy][optimized convolution accuracy image]   
+ 
+
 ## Augmenting the data.
-Since we ignored a lot of rows with NA values, the number of training samples is reduced. One way to get around this is to augment available data.
-Here the images are flipped to increase the number of images.   
+The loss of the model above is not low compared to the Dense Model. This can be attributed to a lot of rows with NA values being dropped. One way to get around this is to augment available data.  
+Here the images are flipped to increase the number of training data.      
 ![Flipped][flipped]   
 We can see that the target values also needs to be updated along with flipping the image.
 
