@@ -16,6 +16,9 @@
 Faces have always intringued me. From reading Paul Ekman's 'Unmasking the face' to staring at my opponent's face across the ring unable to decide if he is really going to throw that punch, it is always exciting. After joining a 'Computational Machine Learning' course at 
 'Indian Institute of Science' we decided to go work on faces.
 
+## Credits
+Facial keypoint recognition is not new and has been implemented before. I found an implementation in Lasagne by Daniel Nouri (http://danielnouri.org/notes/2014/12/17/using-convolutional-neural-nets-to-detect-facial-keypoints-tutorial/). I found the notes extremely helpful and used similiar ideas while implementing in keras (tensor flow).
+
 ## Contents
 Prerequisites   
 Data : Loading and Normalization.   
